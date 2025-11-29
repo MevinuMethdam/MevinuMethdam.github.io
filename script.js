@@ -1,26 +1,25 @@
-// Wait until the entire HTML document is loaded before running the scripts.
 document.addEventListener('DOMContentLoaded', function() {
 
     // --- 1. Hamburger Menu Logic ---
     const hamburger = document.getElementById('hamburger-button');
     const navMenu = document.getElementById('nav-menu');
 
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navMenu.classList.toggle('active');
-    });
-
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navMenu.classList.remove('active');
+    if(hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
         });
-    });
 
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+    }
 
     // --- 2. Scrolling Navbar Effect ---
     const header = document.querySelector('.main-header');
-
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
             header.classList.add('scrolled');
@@ -29,20 +28,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
     // --- 3. Typed.js Hero Title Effect ---
     const typedOptions = {
-        strings: ["Hi, I'm Mevinu Methdam", "I'm a Developer with a passion for Quality.","I'm an aspiring QA Automation Engineer.", "Welcome to my Portfolio."],
-        typeSpeed: 80,
-        backSpeed: 25,
+        strings: [
+            "Hi, I'm Mevinu Methdam", 
+            "I'm a Full Stack Developer.",
+            "I build AI-Powered Web Apps.",
+            "I'm a UI/UX Enthusiast.",
+            "Welcome to my Portfolio."
+        ],
+        typeSpeed: 60,
+        backSpeed: 30,
+        backDelay: 1500,
         loop: true,
         showCursor: true,
         cursorChar: '|',
         smartBackspace: true
     };
-
-    const typed = new Typed('#typing-effect', typedOptions);
-
+    
+    if(document.getElementById('typing-effect')){
+        new Typed('#typing-effect', typedOptions);
+    }
 
     // --- 4. Scroll-in Fade Animation ---
     const sections = document.querySelectorAll('.content-section');
@@ -51,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         rootMargin: '0px',
         threshold: 0.1
     };
+    
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -64,31 +71,75 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(section);
     });
 
-    
-    // --- 5. Ripple Effect on Click --- (ADDED THIS NEW SECTION)
-    // Find all the elements you want to have the ripple effect
-    const rippleElements = document.querySelectorAll('.nav-link, .hero-button, .project-links a');
+    // --- 5. Ripple Effect on Click ---
+    const rippleElements = document.querySelectorAll('.nav-link, .hero-button, .project-links a, .contact-button');
 
     rippleElements.forEach(element => {
         element.addEventListener('click', function (e) {
-            // Get the position of the click relative to the element
-            const x = e.clientX - e.target.getBoundingClientRect().left;
-            const y = e.clientY - e.target.getBoundingClientRect().top;
+            const rect = e.target.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
 
-            // Create the ripple span element
             const ripple = document.createElement('span');
             ripple.classList.add('ripple');
             ripple.style.left = x + 'px';
             ripple.style.top = y + 'px';
 
-            // Append the ripple to the clicked element
             this.appendChild(ripple);
 
-            // Remove the ripple span after the animation ends to keep the DOM clean
             setTimeout(() => {
                 ripple.remove();
-            }, 600); // This duration must match the CSS animation duration (0.6s)
+            }, 600);
         });
     });
+
+    // --- 6. Certifications Carousel Logic (CENTER FOCUS) ---
+    const certContainer = document.getElementById('certContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const cards = document.querySelectorAll('.cert-card');
+
+    if (certContainer && cards.length > 0) {
+        
+        // Function to update the active card based on scroll position
+        const updateActiveCard = () => {
+            const containerCenter = certContainer.getBoundingClientRect().left + certContainer.offsetWidth / 2;
+            
+            let closestCard = null;
+            let minDistance = Infinity;
+
+            cards.forEach(card => {
+                const cardCenter = card.getBoundingClientRect().left + card.offsetWidth / 2;
+                const distance = Math.abs(containerCenter - cardCenter);
+
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestCard = card;
+                }
+            });
+
+            cards.forEach(card => card.classList.remove('active'));
+            if (closestCard) {
+                closestCard.classList.add('active');
+            }
+        };
+
+        // Listen for scroll events to update active state
+        certContainer.addEventListener('scroll', updateActiveCard);
+        
+        // Initial check
+        updateActiveCard();
+
+        // Button Navigation
+        nextBtn.addEventListener('click', () => {
+            const cardWidth = cards[0].offsetWidth + 20; // Width + gap
+            certContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
+        });
+
+        prevBtn.addEventListener('click', () => {
+            const cardWidth = cards[0].offsetWidth + 20;
+            certContainer.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+        });
+    }
 
 });
