@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    // --- 1. Hamburger Menu Logic ---
     const hamburger = document.getElementById('hamburger-button');
     const navMenu = document.getElementById('nav-menu');
 
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- 2. Scrolling Navbar Effect ---
     const header = document.querySelector('.main-header');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
@@ -28,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // --- 3. Typed.js Hero Title Effect ---
     const typedOptions = {
         strings: [
             "Hi, I'm Mevinu Methdam", 
@@ -50,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
         new Typed('#typing-effect', typedOptions);
     }
 
-    // --- 4. Scroll-in Fade Animation ---
     const sections = document.querySelectorAll('.content-section');
     const observerOptions = {
         root: null,
@@ -71,7 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(section);
     });
 
-    // --- 5. Ripple Effect on Click ---
     const rippleElements = document.querySelectorAll('.nav-link, .hero-button, .project-links a, .contact-button');
 
     rippleElements.forEach(element => {
@@ -93,15 +88,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // --- 6. Certifications Carousel Logic (CENTER FOCUS) ---
     const certContainer = document.getElementById('certContainer');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const cards = document.querySelectorAll('.cert-card');
 
     if (certContainer && cards.length > 0) {
-        
-        // Function to update the active card based on scroll position
+
         const updateActiveCard = () => {
             const containerCenter = certContainer.getBoundingClientRect().left + certContainer.offsetWidth / 2;
             
@@ -124,15 +117,12 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         };
 
-        // Listen for scroll events to update active state
         certContainer.addEventListener('scroll', updateActiveCard);
-        
-        // Initial check
+
         updateActiveCard();
 
-        // Button Navigation
         nextBtn.addEventListener('click', () => {
-            const cardWidth = cards[0].offsetWidth + 20; // Width + gap
+            const cardWidth = cards[0].offsetWidth + 20; 
             certContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
         });
 
